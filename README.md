@@ -1,16 +1,94 @@
-# chart_my_roots_app
+# ChartMyRoots - 家系図作成アプリケーション
 
-A new Flutter project.
+ChartMyRootsは、直感的で手軽に家系図を作成、閲覧、管理できるFlutter製のWebアプリケーションです。PCブラウザでの操作を主とし、スマートフォンでも快適に利用できるようレスポンシブデザインに対応しています。
 
-## Getting Started
+## 🌟 主な機能
 
-This project is a starting point for a Flutter application.
+*   **人物情報の管理**: 氏名、生年月日、性別、メモなど、家系図を構成する人物の情報を簡単に追加・編集・削除できます。
+*   **家系図の視覚的表示**: 縦型・横型のツリー表示に対応し、ズームやスクロールで大規模な家系図もスムーズに閲覧できます。
+*   **関係性の設定**: 親子関係や配偶者関係を直感的に設定できます。
+*   **データ永続化**: 作成した家系図データはFirebase Firestoreに安全に保存され、いつでもアクセス可能です。
+*   **エクスポート/インポート**: 家系図データをJSON形式でエクスポートしたり、既存のデータをインポートしたりできます。
+*   **PDF出力**: 作成した家系図を印刷可能なPDF形式で出力できます。
+*   **レスポンシブデザイン**: PC、タブレット、スマートフォンなど、様々なデバイスの画面サイズに最適化された表示を提供します。
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 開発の目的
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+*   デジタルで家族の記録を簡単に残せるツールを提供する。
+*   複雑な操作を避け、誰でも直感的に使えるシンプルなUI/UXを実現する。
+*   Flutter Webの可能性を追求し、モダンなWebアプリケーション開発の知見を深める。
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ 技術スタック
+
+*   **フレームワーク**: Flutter (Web)
+*   **言語**: Dart
+*   **データベース**: Firebase Firestore
+*   **状態管理**: Riverpod
+*   **データモデル**: Freezed, Json Serializable
+*   **その他主要ライブラリ**: `go_router`, `pdf`, `printing`, `connectivity_plus` など (詳細は `docs/使用ライブラリ一覧.md` を参照)
+
+## 🏁 はじめに
+
+このプロジェクトをローカル環境で実行するための手順です。
+
+### 前提条件
+
+*   [Flutter SDK](https://flutter.dev/docs/get-started/install) (安定版の最新バージョンを推奨)
+*   [Dart SDK](https://dart.dev/get-dart) (Flutter SDKに同梱)
+*   IDE (Visual Studio Code または Android Studio / IntelliJ IDEA)
+*   Firebaseプロジェクトのセットアップ (詳細は `docs/開発前の事前準備.md` を参照)
+
+### セットアップ手順
+
+1.  **リポジトリをクローンします**:
+    ```bash
+    git clone https://github.com/your-username/chart_my_roots_app.git
+    cd chart_my_roots_app
+    ```
+
+2.  **依存関係をインストールします**:
+    ```bash
+    flutter pub get
+    ```
+
+3.  **Firebaseプロジェクトを設定します**:
+    `docs/開発前の事前準備.md` の指示に従い、Firebaseプロジェクトとの連携設定を行ってください。
+    （主に `flutterfire configure` コマンドを使用します）
+
+4.  **アプリケーションを実行します**:
+    *   **Web**:
+        ```bash
+        flutter run -d chrome
+        ```
+    *   **Androidエミュレータ/デバイス** (接続されている場合):
+        ```bash
+        flutter run
+        ```
+    *   **iOSシミュレータ/デバイス** (macOS環境で接続されている場合):
+        ```bash
+        flutter run
+        ```
+
+## 📚 ドキュメント
+
+プロジェクトに関する詳細なドキュメントは `docs/` ディレクトリにあります。
+
+*   **設計書**:
+    *   `docs/家系図アプリ設計書 (シンプル・直感型).md` (全体設計)
+    *   `docs/基本設計書/` (各機能の基本設計)
+    *   `docs/詳細設計書/` (各機能・画面の詳細設計)
+    *   `docs/クラス詳細/` (主要クラスの詳細設計)
+*   **画面デザイン**:
+    *   `docs/画面デザイン/` (HTML形式の画面デザイン案)
+*   **開発ガイドライン**:
+    *   `docs/コーディングガイドライン.md`
+    *   `docs/使用ライブラリ一覧.md`
+    *   `docs/開発前の事前準備.md`
+
+## 🤝 貢献
+
+バグ報告、機能提案、プルリクエストはいつでも歓迎します。貢献方法については、`CONTRIBUTING.md`（今後作成予定）を参照してください。
+
+## 📜 ライセンス
+
+このプロジェクトは [MITライセンス](LICENSE)（今後作成予定）の下で公開されています。
