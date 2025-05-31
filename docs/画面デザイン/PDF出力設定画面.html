@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF出力設定画面</title>
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 550px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background-color: #4a6da7;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #4a6da7;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            border-color: #4a6da7;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 109, 167, 0.2);
+        }
+
+        .option-section {
+            margin-bottom: 1.5rem;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        .option-section-title {
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+            color: #4a6da7;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-preview {
+            width: 120px;
+            height: 170px;
+            border: 1px solid #ddd;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .page-preview .tree-placeholder {
+            width: 90%;
+            height: 60%;
+            margin-top: 30px;
+            background-color: #f0f0f0;
+            border: 1px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            color: #777;
+        }
+
+        .page-preview .title-placeholder {
+            position: absolute;
+            top: 10px;
+            width: 80%;
+            height: 15px;
+            background-color: #f0f0f0;
+        }
+
+        .page-preview .footer-placeholder {
+            position: absolute;
+            bottom: 10px;
+            width: 80%;
+            height: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .page-preview.landscape {
+            width: 170px;
+            height: 120px;
+        }
+
+        .page-preview.landscape .tree-placeholder {
+            width: 60%;
+            height: 70%;
+            margin-top: 25px;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #4a6da7;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5d97;
+        }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .radio-group {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+
+            .preview-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .modal-footer {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                flex: 1;
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">PDF出力設定</div>
+            <button class="close-button">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form id="pdf-export-form">
+                <div class="form-group">
+                    <label for="pdf-title" class="form-label">タイトル</label>
+                    <input type="text" id="pdf-title" class="form-control" value="家系図 - 山田家" placeholder="PDFに表示するタイトル">
+                </div>
+
+                <div class="option-section">
+                    <div class="option-section-title">用紙サイズ</div>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="paper-a4" name="paper-size" value="a4" checked>
+                            <label for="paper-a4">A4</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="paper-a3" name="paper-size" value="a3">
+                            <label for="paper-a3">A3</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="paper-letter" name="paper-size" value="letter">
+                            <label for="paper-letter">レターサイズ</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-section">
+                    <div class="option-section-title">向き</div>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="orientation-portrait" name="orientation" value="portrait" checked>
+                            <label for="orientation-portrait">縦向き</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="orientation-landscape" name="orientation" value="landscape">
+                            <label for="orientation-landscape">横向き</label>
+                        </div>
+                    </div>
+
+                    <div class="preview-container">
+                        <div class="page-preview" id="preview-portrait">
+                            <div class="title-placeholder"></div>
+                            <div class="tree-placeholder">家系図</div>
+                            <div class="footer-placeholder"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-section">
+                    <div class="option-section-title">表示オプション</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="show-date" name="show-date" checked>
+                            <label for="show-date">日付を表示</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="show-legend" name="show-legend" checked>
+                            <label for="show-legend">凡例を表示</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="fit-to-page" name="fit-to-page">
+                            <label for="fit-to-page">1ページに全体を収める</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="cancel-button">キャンセル</button>
+            <button type="button" class="btn btn-secondary" id="preview-button">プレビュー</button>
+            <button type="submit" form="pdf-export-form" class="btn btn-primary" id="generate-button">PDFを生成</button>
+        </div>
+    </div>
+
+    <script>
+        // 向きの切り替え表示用スクリプト
+        document.getElementById('orientation-portrait').addEventListener('change', function() {
+            const preview = document.getElementById('preview-portrait');
+            preview.classList.remove('landscape');
+        });
+
+        document.getElementById('orientation-landscape').addEventListener('change', function() {
+            const preview = document.getElementById('preview-portrait');
+            preview.classList.add('landscape');
+        });
+    </script>
+</body>
+</html>
+

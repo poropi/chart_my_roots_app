@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物情報編集画面</title>
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background-color: #4a6da7;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / 3;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #4a6da7;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            border-color: #4a6da7;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 109, 167, 0.2);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #4a6da7;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5d97;
+        }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+
+        .btn-danger {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c9433f;
+        }
+
+        .delete-button-container {
+            margin-right: auto;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: 1;
+            }
+
+            .modal-footer {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                flex: 1;
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .delete-button-container {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .delete-button-container .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">人物情報編集</div>
+            <button class="close-button">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form id="person-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name" class="form-label">氏名（必須）</label>
+                        <input type="text" id="name" class="form-control" value="山田 太郎" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maiden-name" class="form-label">旧姓</label>
+                        <input type="text" id="maiden-name" class="form-control" placeholder="結婚前の姓">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birth-date" class="form-label">生年月日</label>
+                        <input type="date" id="birth-date" class="form-control" value="1960-04-01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="death-date" class="form-label">没年月日</label>
+                        <input type="date" id="death-date" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">性別</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="gender-male" name="gender" value="male" checked>
+                                <label for="gender-male">男性</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="gender-female" name="gender" value="female">
+                                <label for="gender-female">女性</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="gender-other" name="gender" value="other">
+                                <label for="gender-other">その他</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="memo" class="form-label">メモ</label>
+                        <textarea id="memo" class="form-control" placeholder="この人物に関する備考情報">会社役員。趣味は釣りとガーデニング。</textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <div class="delete-button-container">
+                <button type="button" class="btn btn-danger" id="delete-button">削除</button>
+            </div>
+            <button type="button" class="btn btn-secondary" id="cancel-button">キャンセル</button>
+            <button type="submit" form="person-form" class="btn btn-primary" id="save-button">保存</button>
+        </div>
+    </div>
+</body>
+</html>
+
